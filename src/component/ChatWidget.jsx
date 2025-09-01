@@ -300,7 +300,6 @@ const ChatWidget = () => {
                                 </p>
                             )}
                             {messages.map((m, i) => {
-                                // Check if this is a message from WebSocket (incoming message)
                                 if (m.message && m.message.content) {
                                     return (
                                         <div key={i} className="flex justify-start">
@@ -310,7 +309,6 @@ const ChatWidget = () => {
                                         </div>
                                     );
                                 }
-                                // Check if this is a message you sent (outgoing message)
                                 else if (m.text && m.text.body) {
                                     return (
                                         <div key={i} className="flex justify-end">
@@ -320,7 +318,6 @@ const ChatWidget = () => {
                                         </div>
                                     );
                                 }
-                                // Fallback for other message types
                                 else {
                                     return (
                                         <div key={i} className="flex justify-start">
