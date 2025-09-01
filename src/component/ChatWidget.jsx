@@ -289,20 +289,48 @@ const ChatWidget = () => {
                             </button>
                         </div>
 
+                        {/* Update the message display section */}
                         <div
                             ref={messagesContainerRef}
-                            className="flex-1 overflow-y-auto p-4 text-gray-600"
+                            className="flex-1 overflow-y-auto p-4 text-gray-600 space-y-2"
                         >
                             {messages.length === 0 && (
                                 <p className="text-center text-gray-400">
                                     Start your conversation...
                                 </p>
                             )}
-                            {messages.map((m, i) => (
-                                <div key={i} className="mb-2">
-                                    {m.text?.body || "[media]"}
-                                </div>
-                            ))}
+                            {messages.map((m, i) => {
+                                // Check if this is a message from WebSocket (incoming message)
+                                if (m.message && m.message.content) {
+                                    return (
+                                        <div key={i} className="flex justify-start">
+                                            <span className="p-2 px-5 inline-block bg-gray-200 rounded">
+                                                {m.message.content}
+                                            </span>
+                                        </div>
+                                    );
+                                }
+                                // Check if this is a message you sent (outgoing message)
+                                else if (m.text && m.text.body) {
+                                    return (
+                                        <div key={i} className="flex justify-end">
+                                            <span className="p-2 px-5 inline-block bg-blue-200 rounded text-right">
+                                                {m.text.body}
+                                            </span>
+                                        </div>
+                                    );
+                                }
+                                // Fallback for other message types
+                                else {
+                                    return (
+                                        <div key={i} className="flex justify-start">
+                                            <span className="p-2 px-5 inline-block bg-gray-200 rounded">
+                                                [Unknown message format]
+                                            </span>
+                                        </div>
+                                    );
+                                }
+                            })}
                         </div>
 
                         {/* Media Preview */}
