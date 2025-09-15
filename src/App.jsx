@@ -8,15 +8,15 @@ function App() {
 
   return (
     <>
-      <button
+      {/* <button
         onClick={() => setOpen(true)}
         className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg"
-      >
-        <ChatIcon fontSize="large" />
-      </button>
-      {open && <div className="h-screen border flex items-center justify-center">
+      > */}
+        {/* <ChatIcon fontSize="large" /> */}
+      {/* </button> */}
+      {/* {open && <div className="h-screen border flex items-center justify-center"> */}
         <ChatWidget onClose={()=> setOpen(false)}/>
-      </div>}
+      {/* </div>} */}
     </>
   )
 }
