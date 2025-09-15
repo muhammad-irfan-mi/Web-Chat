@@ -8,7 +8,7 @@ import {
     Close as CloseIcon,
 } from "@mui/icons-material";
 
-const ChatWidget = () => {
+const ChatWidget = ({onClose}) => {
     const [open, setOpen] = useState(false);
     const [media, setMedia] = useState([]);
     const [message, setMessage] = useState("");
@@ -26,7 +26,7 @@ const ChatWidget = () => {
     const audioChunksRef = useRef([]);
     const wsRef = useRef(null);
 
-    const WS_URL = "wss://a97a161390db.ngrok-free.app";
+    const WS_URL = "wss://72d57cd72974.ngrok-free.app";
     const WEBCHAT_TOKEN = "C8AAD2AA295C90618389F6EF32A98CABCC8AD0EA68D10117";
     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NTExNjJlMDk2ZDA5Y2EyODFkNWQwZiIsInJvbGUiOiJzdXBlcmFkbWluIiwiaWF0IjoxNzU2MzU5NjQ2LCJleHAiOjE3NTY5NjQ0NDZ9.hBcngXVL4RxLtU5pQbqQA-gd33bR8QFYHxj53Fsexkc";
 
@@ -272,19 +272,19 @@ const ChatWidget = () => {
 
     return (
         <>
-            <button
+            {/* <button
                 onClick={() => setOpen(true)}
                 className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg"
             >
                 <ChatIcon fontSize="large" />
-            </button>
+            </button> */}
 
-            {open && (
+            {/* {open && ( */}
                 <div className="fixed inset-0 bg-black/40 flex justify-end z-50">
                     <div className="bg-white w-full max-w-md h-full sm:rounded-l-2xl flex flex-col">
                         <div className="flex items-center justify-between p-4 border-b">
                             <h2 className="text-lg font-semibold">Chat</h2>
-                            <button onClick={() => setOpen(false)}>
+                            <button onClick={onClose}>
                                 <CloseIcon />
                             </button>
                         </div>
@@ -417,7 +417,7 @@ const ChatWidget = () => {
                         </div>
                     </div>
                 </div>
-            )}
+             {/* )} */}
         </>
     );
 };
