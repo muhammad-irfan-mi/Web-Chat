@@ -8,8 +8,7 @@ import {
     Close as CloseIcon,
 } from "@mui/icons-material";
 
-const ChatWidget = ({onClose}) => {
-    const [open, setOpen] = useState(false);
+const ChatWidget = ({ open, onClose }) => {
     const [media, setMedia] = useState([]);
     const [message, setMessage] = useState("");
     const [recording, setRecording] = useState(false);
@@ -272,21 +271,13 @@ const ChatWidget = ({onClose}) => {
 
     return (
         <>
-            {/* <button
-                onClick={() => setOpen(true)}
-                className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg"
-            >
-                <ChatIcon fontSize="large" />
-            </button> */}
-
-            {/* {open && ( */}
                 <div className="fixed inset-0 bg-black/40 flex justify-end z-50">
-                    <div className="bg-white w-full max-w-md h-full sm:rounded-l-2xl flex flex-col">
+                    <div className="bg-white w-full h-full sm:rounded-l-2xl flex flex-col">
                         <div className="flex items-center justify-between p-4 border-b">
                             <h2 className="text-lg font-semibold">Chat</h2>
-                            <button onClick={onClose}>
+                            {/* <button onClick={onClose}>
                                 <CloseIcon />
-                            </button>
+                            </button> */}
                         </div>
 
                         {/* Update the message display section */}
@@ -417,7 +408,6 @@ const ChatWidget = ({onClose}) => {
                         </div>
                     </div>
                 </div>
-             {/* )} */}
         </>
     );
 };
