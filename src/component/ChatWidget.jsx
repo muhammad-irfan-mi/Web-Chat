@@ -25,7 +25,7 @@ const ChatWidget = ({ open, onClose }) => {
     const audioChunksRef = useRef([]);
     const wsRef = useRef(null);
 
-    const WS_URL = "wss://5a7d98f3ed84.ngrok-free.app";
+    const WS_URL = "wss://wswebchat.botnflow.com";
     const WEBCHAT_TOKEN = "C8AAD2AA295C90618389F6EF32A98CABCC8AD0EA68D10117";
     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NTExNjJlMDk2ZDA5Y2EyODFkNWQwZiIsInJvbGUiOiJzdXBlcmFkbWluIiwiaWF0IjoxNzU2MzU5NjQ2LCJleHAiOjE3NTY5NjQ0NDZ9.hBcngXVL4RxLtU5pQbqQA-gd33bR8QFYHxj53Fsexkc";
 
