@@ -1031,6 +1031,27 @@ const ChatWidget = ({ open, onClose }) => {
                                 );
                             }
 
+                            else if (m.message && m.message?.type === "audio") {
+                                return (
+                                    <div className="w-full">
+                                        <audio
+                                            controls
+                                            playsInline
+                                            className="rounded-lg w-full max-h-60 object-cover cursor-pointer"
+                                            src={m.message?.mediaUrl}
+                                        />
+                                        {m.message?.content && (
+                                            <p
+                                                className="text-sm mt-1 px-2 pr-12"
+                                                style={{ whiteSpace: "pre-line" }}
+                                            >
+                                                {m.message?.content}
+                                            </p>
+                                        )}
+                                    </div>
+                                );
+                            }
+
                             else if (m.message && m.message?.type === "document") {
                                 return (
                                     <>
