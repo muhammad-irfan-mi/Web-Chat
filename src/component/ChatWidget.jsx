@@ -287,7 +287,7 @@ const ChatWidget = ({ open, onClose }) => {
                                     Start your conversation...
                                 </p>
                             )}
-                            {messages.map((m, i) => {
+                            {/* {messages.map((m, i) => {
                                 if (m.message && m.message.content) {
                                     return (
                                         <div key={i} className="flex justify-start">
@@ -315,7 +315,238 @@ const ChatWidget = ({ open, onClose }) => {
                                         </div>
                                     );
                                 }
-                            })}
+                            })} */}
+                            {messages.map((m, i) => {
+    // Handle incoming bot messages (from WebSocket)
+    if (m.message && m.message.content) {
+        return (
+            <div key={i} className="flex justify-start">
+                <span className="p-2 px-5 inline-block bg-gray-200 rounded">
+                    {m.message.content}
+                </span>
+            </div>
+        );
+    }
+    // Handle outgoing user text messages
+    else if (m.text && m.text.body) {
+        return (
+            <div key={i} className="flex justify-end">
+                <span className="p-2 px-5 inline-block bg-blue-200 rounded text-right">
+                    {m.text.body}
+                </span>
+            </div>
+        );
+    }
+    // Handle structured messages with messageType
+    else if (m.messageType) {
+        switch (m.messageType) {
+            case "text":
+                return (
+                    <div key={i} className={`flex ${m.botMessage ? 'justify-start' : 'justify-end'}`}>
+                        <div className={`p-2 px-5 inline-block rounded ${m.botMessage ? 'bg-gray-200' : 'bg-blue-200'}`}>
+                            {m.content}
+                        </div>
+                    </div>
+                );
+
+            case "image":
+                return (
+                    <div key={i} className="flex justify-start">
+                        <div className="max-w-xs">
+                            <img
+                                src={m.mediaUrl}
+                                alt="media"
+                                className="rounded-lg w-full h-auto object-cover"
+                            />
+                            {m.content && (
+                                <p className="text-sm mt-1 p-2 bg-gray-200 rounded">
+                                    {m.content}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                );
+
+            case "video":
+                return (
+                    <div key={i} className="flex justify-start">
+                        <div className="max-w-xs">
+                            <video
+                                controls
+                                playsInline
+                                className="rounded-lg w-full h-auto object-cover"
+                                src={m.mediaUrl}
+                            />
+                            {m.content && (
+                                <p className="text-sm mt-1 p-2 bg-gray-200 rounded">
+                                    {m.content}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                );
+
+            case "audio":
+                return (
+                    <div key={i} className="flex justify-start">
+                        <div className="bg-gray-200 rounded-lg p-3">
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        const audio = document.getElementById(`audio-${m._id}`);
+                                        if (audio) {
+                                            if (audio.paused) audio.play();
+                                            else audio.pause();
+                                        }
+                                    }}
+                                    className="cursor-pointer text-gray-700"
+                                >
+                                    <PlayCircle />
+                                </button>
+                                <div className="flex-1 h-1 bg-gray-300 rounded">
+                                    <div
+                                        id={`progress-${m._id}`}
+                                        className="h-1 bg-blue-500 rounded"
+                                        style={{ width: "0%" }}
+                                    />
+                                </div>
+                                <span
+                                    id={`duration-${m._id}`}
+                                    className="text-xs text-gray-600"
+                                >
+                                    0:00
+                                </span>
+                                <audio
+                                    id={`audio-${m._id}`}
+                                    src={m.mediaUrl}
+                                    onTimeUpdate={(e) => {
+                                        const audio = e.target;
+                                        if (audio && audio.duration) {
+                                            const progress = (audio.currentTime / audio.duration) * 100;
+                                            const progressEl = document.getElementById(`progress-${m._id}`);
+                                            if (progressEl) progressEl.style.width = `${progress}%`;
+                                            const durationEl = document.getElementById(`duration-${m._id}`);
+                                            if (durationEl) durationEl.innerText = new Date(audio.currentTime * 1000)
+                                                .toISOString()
+                                                .substring(14, 19);
+                                        }
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                );
+
+            case "file":
+            case "document":
+                return (
+                    <div key={i} className="flex justify-start">
+                        <div className="bg-gray-200 rounded-lg p-3 max-w-xs">
+                            <div className="flex items-center gap-2">
+                                <AttachFileIcon fontSize="small" />
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-medium truncate">
+                                        {m.content || "Document"}
+                                    </p>
+                                    <a
+                                        href={m.mediaUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-xs text-blue-600 hover:underline"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        Download File
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+
+            case "button":
+                return (
+                    <div key={i} className="flex justify-start">
+                        <div className="bg-gray-200 rounded-lg p-3 max-w-xs">
+                            {m.mediaUrl && (
+                                <img
+                                    src={m.mediaUrl}
+                                    alt="media"
+                                    className="rounded-lg w-full h-auto object-cover mb-2"
+                                />
+                            )}
+                            
+                            {m.button?.header?.type === "image" && m.button?.header?.mediaUrl && (
+                                <img
+                                    src={m.button.header.mediaUrl}
+                                    alt="Header"
+                                    className="rounded-lg w-full h-auto object-cover mb-2"
+                                />
+                            )}
+
+                            {m.button?.header?.type === "text" && (
+                                <h3 className="font-semibold text-lg mb-2">
+                                    {m.button.header.text}
+                                </h3>
+                            )}
+
+                            {m.button?.body && (
+                                <p className="text-gray-800 mb-2">
+                                    {m.button.body}
+                                </p>
+                            )}
+                            
+                            {m.button?.footer && (
+                                <p className="text-gray-500 text-sm mb-3">
+                                    {m.button.footer}
+                                </p>
+                            )}
+
+                            <div className="flex flex-col gap-2">
+                                {(m.button?.buttons || []).map((button, index) => (
+                                    <button
+                                        key={index}
+                                        className="bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-600 transition text-sm"
+                                        onClick={() => console.log("Button clicked:", button)}
+                                    >
+                                        {button.title}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                );
+
+            case "button_reply":
+                return (
+                    <div key={i} className="flex justify-end">
+                        <div className="p-2 px-5 inline-block bg-blue-200 rounded text-right">
+                            {m.buttonReply?.buttonReply || m.content}
+                        </div>
+                    </div>
+                );
+
+            default:
+                return (
+                    <div key={i} className="flex justify-start">
+                        <div className="p-2 px-5 inline-block bg-gray-200 rounded">
+                            [Unknown message type: {m.messageType}]
+                        </div>
+                    </div>
+                );
+        }
+    }
+    // Fallback for unknown message formats
+    else {
+        return (
+            <div key={i} className="flex justify-start">
+                <span className="p-2 px-5 inline-block bg-gray-200 rounded">
+                    [Unknown message format]
+                </span>
+            </div>
+        );
+    }
+})}
                         </div>
 
                         {/* Media Preview */}
