@@ -987,7 +987,7 @@ const ChatWidget = ({ open, onClose }) => {
                                                         key={b.id}
                                                         className="px-3 py-1 rounded bg-blue-500 text-white text-sm"
                                                     >
-                                                        {b.title}
+                                                        {b.title || b.text}
                                                     </button>
                                                 ))}
                                             </div>
